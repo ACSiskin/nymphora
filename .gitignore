@@ -1,96 +1,60 @@
 # =========================================================
-# NYMPHORA .gitignore (Next.js + Prisma + OSINT tooling)
+# NYMPHORA .gitignore
 # =========================================================
 
-# --- Node / JS ---
+# --- dependencies ---
 node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-.pnpm-store/
-.npm/
-.eslintcache
-*.tsbuildinfo
 
-# --- Next.js ---
+# --- Next.js build output ---
 .next/
 out/
 dist/
 build/
+
+# --- Vercel / Turbo ---
 .vercel/
 .turbo/
-.next-cache/
-.nextcache/
 
-# --- Env / secrets ---
+# --- logs ---
+*.log
+logs/
+
+# --- env (secrets) ---
 .env
 .env.*
 !.env.example
 
-# --- Prisma ---
-# (Keep schema/migrations in repo; ignore local generated artifacts if any)
-prisma/*.db
-prisma/*.db-journal
+# --- caches ---
+.cache/
+.tmp/
+tmp/
+temp/
 
-# --- Database dumps / local data ---
-*.sql
-*.dump
-*.bak
-*.sqlite
-*.sqlite3
-
-# --- Logs ---
-logs/
-*.log
-
-# --- OS / editor ---
-.DS_Store
-Thumbs.db
-*.swp
-*.swo
-*~
-.idea/
-.vscode/
-*.iml
-
-# --- Coverage / tests ---
+# --- test / coverage ---
 coverage/
 .nyc_output/
 playwright-report/
 test-results/
 
-# --- Python (NOVA / tools) ---
+# --- OS / editors ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# --- Prisma local DB artifacts (keep schema/migrations) ---
+prisma/*.db
+prisma/*.db-journal
+
+# --- Python (if Nova backend exists) ---
 __pycache__/
 *.py[cod]
-*.pyd
-*.pyo
-*.pkl
-*.pickle
-*.egg-info/
-.eggs/
 .venv/
 venv/
 env/
-pip-wheel-metadata/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
-
-# --- Jupyter ---
-.ipynb_checkpoints/
-
-# --- Docker ---
-*.pid
-docker-compose.override.yml
-
-# --- Local uploads / temp ---
-tmp/
-temp/
-.cache/
-*.tmp
-
-
-data/GeoLite2-City.mmdb
-data/*.mmdb
-
