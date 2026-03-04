@@ -1,93 +1,135 @@
-# NYMPHORA (Beta)
 
-![NYMPHORA](public/logo.png)
 
-**NYMPHORA** is a **beta** OSINT / recon web application prepared for further development — especially for **deeper AI integration** (the *NOVA* assistant) and expanded automation workflows.
+<p align="center">
+  <img src="public/nymphora.png" alt="NYMPHORA logo" width="180" />
+</p>
 
-NYMPHORA is also **a component of a larger platform (Project R.O.I.)**, which means **some functions may be incomplete, disabled, or not fully operational** in this standalone repository until the missing R.O.I. services and integrations are connected.
+<h1 align="center">NYMPHORA</h1>
 
----
+<p align="center">
+  <b>Network Yield Mapping & Profiling Host-Oriented Recon Assistant</b><br/>
+  OSINT / Recon web module for research workflows — part of <b>Project R.O.I.</b>
+</p>
 
-## What NYMPHORA does
+<p align="center">
+  <img alt="version" src="https://img.shields.io/badge/version-beta%201.0.0-blue" />
+  <img alt="Next.js" src="https://img.shields.io/badge/Next.js-15.x-black" />
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-ready-3178c6" />
+  <img alt="Prisma" src="https://img.shields.io/badge/Prisma-ORM-2d3748" />
+  <img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-supported-336791" />
+  <img alt="GeoIP" src="https://img.shields.io/badge/GeoIP-GeoLite2%20City-4c1" />
+  <img alt="License" src="https://img.shields.io/badge/license-MIT-success" />
+</p>
 
-NYMPHORA combines a modern web UI with server-side OSINT automation. It helps you:
-
-- Organize investigations into **cases** (create / update / track artifacts).
-- Run **automated recon workflows** from the backend (system tools executed server-side).
-- Enrich IPs with **offline GeoIP** (MaxMind GeoLite2 City database).
-- Use **NOVA (AI assistant)** for analysis, summaries, IOC extraction, and report generation.
-
-> **Important:** NYMPHORA executes OSINT utilities on the server (Node.js runtime). For full functionality you must install the required system tools (see below).
-
----
-
-## Beta / Platform note (R.O.I.)
-
-This repository contains the NYMPHORA module. Because it is part of a bigger platform:
-
-- Some UI elements can be present even if the corresponding backend workflow is not fully connected.
-- Certain “platform” features may require services that are **not shipped here**.
-- The AI layer can be extended further as R.O.I. integration progresses.
+<p align="center">
+  <i>This is a <b>beta</b> release prepared for further development, including deeper AI interaction and integration.</i>
+</p>
 
 ---
 
-## GeoIP coverage limitation (offline database)
+## Table of Contents
+
+- [Overview](#overview)
+- [Beta & Platform Note (Project R.O.I.)](#beta--platform-note-project-roi)
+- [Key Capabilities](#key-capabilities)
+- [GeoIP Coverage Limitation](#geoip-coverage-limitation)
+- [Tech Stack](#tech-stack)
+- [Repository Layout](#repository-layout)
+- [Requirements](#requirements)
+- [Quick Start (Installer)](#quick-start-installer)
+- [Manual Setup](#manual-setup)
+- [Configuration](#configuration)
+- [GeoIP Database Setup](#geoip-database-setup)
+- [Usage Notes](#usage-notes)
+- [Troubleshooting](#troubleshooting)
+- [Roadmap](#roadmap)
+- [License](#license)
+- [Research & Education Notice](#research--education-notice)
+
+---
+
+## Overview
+
+**NYMPHORA** is a web-based OSINT / recon module designed to support **repeatable research workflows** through a modern UI and server-side automation.
+
+It can:
+- Manage **cases** and investigation artifacts
+- Run **recon/scanning workflows** through backend API endpoints
+- Enrich IPs with **offline GeoIP** (MaxMind GeoLite2 City)
+- Provide an extensible **AI assistant layer** (*NOVA*) for analysis and reporting
+
+> NYMPHORA executes OSINT utilities server-side. For full functionality you must install required system tools (see [Requirements](#requirements)).
+
+---
+
+## Beta & Platform Note (Project R.O.I.)
+
+NYMPHORA is **part of a larger platform (Project R.O.I.)**.  
+Because this repository contains only the NYMPHORA module:
+
+- Some platform-dependent features may be **incomplete, disabled, or partially wired**
+- Certain UI elements may appear even if the corresponding R.O.I. service is not present
+- Additional AI and automation features are expected to expand as R.O.I. integrations mature
+
+---
+
+## Key Capabilities
+
+### 1) Case management
+Organize work into investigation cases (CRUD routes + UI views).
+
+### 2) Recon / scanning workflows
+NYMPHORA can orchestrate tools such as:
+- `rustscan`, `nmap`, `naabu`, `nuclei`, `amass`, `whatweb`, `whois`, `dig`
+
+These run via backend API endpoints and return structured results to the UI.
+
+### 3) GeoIP enrichment (single + batch)
+- `GET /api/geoip?ip=...`
+- `POST /api/geoip/batch`
+
+### 4) NOVA (AI assistant layer)
+- Analyst support (summaries, observations, IOC extraction)
+- Report generation endpoints (model-driven)
+- Designed for deeper tool-calling and structured outputs in future releases
+
+> AI requires `.env` configuration (see [Configuration](#configuration)).
+
+---
+
+## GeoIP Coverage Limitation
 
 NYMPHORA uses a **local** GeoIP database:
 
 - `data/GeoLite2-City.mmdb`
 
-The IP-to-location coverage is limited to what exists inside this file.
+The IP-to-location pool is **limited to the contents of this file**.
 
-To expand the GeoIP dataset you can:
-1. **Replace** `data/GeoLite2-City.mmdb` with a newer / different MaxMind DB file, **or**
-2. Integrate NYMPHORA with an external GeoIP provider API (recommended for enterprise-grade coverage).
-
----
-
-## Key features
-
-### 1) Case management API
-- CRUD routes for investigation “cases”.
-
-### 2) Recon / scanning workflows
-NYMPHORA can run recon tools such as:
-- `rustscan`, `nmap`, `naabu`, `nuclei`, `amass`, `whatweb`, `whois`, `dig`
-
-These are executed by server-side API routes (via Node.js) and returned to the UI.
-
-### 3) GeoIP enrichment (single + batch)
-- `/api/geoip?ip=...`
-- `/api/geoip/batch` (POST)
-
-### 4) NOVA (AI assistant)
-- Chat-style analyst support.
-- Report generation.
-- IOC-focused helper endpoint.
-
-> AI features require valid configuration in `.env` (see **Configuration**).
+To expand coverage:
+1. **Replace** `data/GeoLite2-City.mmdb` with a newer / different MaxMind database, **or**
+2. Integrate NYMPHORA with an external GeoIP provider API (recommended for enterprise-grade coverage)
 
 ---
 
-## Tech stack
+## Tech Stack
 
 - **Next.js** (App Router) + **TypeScript**
 - **Prisma ORM**
 - **PostgreSQL**
-- **MaxMind** (offline GeoIP lookups from `.mmdb`)
+- **MaxMind** offline GeoIP lookups (`.mmdb`)
 - **OpenAI SDK** (NOVA endpoints)
 
 ---
 
-## Repository structure (high level)
+## Repository Layout
 
-- `app/` – Next.js routes and UI (App Router)
+- `app/` – Next.js routes and UI
 - `app/api/` – backend endpoints (cases, geoip, recon, nova)
-- `app/scanner/` – execution layer for system OSINT tools
-- `components/` – UI components (incl. consoles / renderers)
-- `lib/` – shared services (GeoIP helper, utils)
+- `app/scanner/` – execution layer for OSINT tools
+- `components/` – UI components (consoles / renderers)
+- `lib/` – shared logic (GeoIP helper, utils)
 - `prisma/` – Prisma schema
-- `data/` – offline GeoIP database (`GeoLite2-City.mmdb`)
+- `data/` – GeoIP DB (`GeoLite2-City.mmdb`)
 - `public/` – static assets (**place `logo.png` here**)
 
 ---
@@ -95,11 +137,11 @@ These are executed by server-side API routes (via Node.js) and returned to the U
 ## Requirements
 
 ### Runtime
-- **Node.js 18+** (recommended: 20+)
+- **Node.js 18+** (recommended 20+)
 - **PostgreSQL** (local or remote)
 
-### System tools (for recon features)
-NYMPHORA expects these tools available in your system `PATH`:
+### OSINT system tools (for recon features)
+NYMPHORA expects these tools to be available in your system **PATH**:
 
 - `nmap`
 - `rustscan`
@@ -110,34 +152,30 @@ NYMPHORA expects these tools available in your system `PATH`:
 - `naabu`
 - `nuclei`
 
-> **Linux is strongly recommended** (Debian/Ubuntu/Kali).  
-> On Windows, use **WSL2** for best results.
+**Linux is strongly recommended** (Debian/Ubuntu/Kali).  
+On Windows, use **WSL2** for best compatibility.
 
 ---
 
-## Installation
+## Quick Start (Installer)
 
-### Option A — Installer script (recommended)
-
-This repo includes an installer:
+Run the installer from the project root:
 
 ```bash
 python3 nymphora_setup.py
 ```
 
-The installer will:
-- verify Node/Python presence
-- install Node dependencies
-- run Prisma (`generate` + `db push`)
-- optionally attempt to install some OSINT tools on Linux (requires `sudo`)
+What it typically does:
+- installs Node dependencies
+- runs Prisma (`generate` + `db push`)
+- creates a `.env` template if missing
+- can verify/install select OSINT tools (environment dependent)
 
-#### Note about “full” tool installation
-The default installer may not install every optional OSINT tool used in the deep recon workflows (depending on your environment and distro).  
-If you want a stricter “install-everything” approach, you can extend the installer to also handle: `dig`, `amass`, `naabu`, `nuclei` (and any future additions).
+> If your environment needs a stricter “install everything” flow, use the enhanced installer or extend `nymphora_setup.py` to include all tools used in deep workflows.
 
 ---
 
-### Option B — Manual installation (developer friendly)
+## Manual Setup
 
 1) Install Node deps:
 
@@ -149,36 +187,36 @@ npm ci
 
 ```bash
 cp .env.example .env
-# or create it manually (see Configuration section below)
+# or create it manually (see Configuration)
 ```
 
-3) Prepare database (Prisma):
+3) Prisma:
 
 ```bash
 npx prisma generate
 npx prisma db push
 ```
 
-4) Start dev server:
+4) Start the app:
 
 ```bash
 npm run dev
 ```
 
-App runs on: **http://localhost:3002**
+Default URL: **http://localhost:3002**
 
 ---
 
-## Configuration (.env)
+## Configuration
 
-Minimum required:
+Minimum:
 
 ```env
 DATABASE_URL="postgresql://USER:PASSWORD@HOST:5432/DBNAME?schema=public"
 NEXT_PUBLIC_BASE_URL="http://localhost:3002"
 ```
 
-AI (optional but recommended for NOVA routes):
+AI / NOVA (optional but recommended for AI routes):
 
 ```env
 OPENAI_API_KEY="your_api_key"
@@ -187,47 +225,53 @@ NOVA_MODEL="gpt-4o"
 NOVA_REPORT_MODEL="gpt-4o"
 ```
 
-> Without `OPENAI_API_KEY`, AI endpoints will fail.
-
 ---
 
-## GeoIP database setup
+## GeoIP Database Setup
 
 NYMPHORA expects:
 
 - `data/GeoLite2-City.mmdb`
 
-If you see an error like **missing GeoLite2 DB**, place the file in `data/` exactly as above.
+If GeoIP endpoints fail, verify the file exists at the exact path above.
 
 ---
 
-## Usage notes (legal + operational)
+## Usage Notes
 
-- Recon/scanning features can generate network traffic and touch external infrastructure.
+- Recon/scanning features can generate network traffic.
 - **Only scan assets you own or have explicit permission to test.**
-- Consider running NYMPHORA inside a controlled lab environment.
+- Prefer isolated environments (lab/VPN) for experiments.
 
 ---
 
 ## Troubleshooting
 
-### “Brak pliku data/GeoLite2-City.mmdb”
-Put the GeoLite2 City database into:
+### Missing GeoLite DB
+Place the MaxMind database at:
 
 - `data/GeoLite2-City.mmdb`
 
-### “command not found” for recon tools
-Install the missing tool and ensure it is available in `PATH`, e.g.:
+### “command not found” (OSINT tools)
+Install missing binaries and ensure `PATH` is correct.
 
-- Debian/Ubuntu/Kali:
-  - `sudo apt-get install -y nmap whois whatweb dnsutils amass`
-- Go-based tools:
-  - `go install github.com/projectdiscovery/naabu/v2/cmd/naabu@latest`
-  - `go install github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest`
+Examples (Debian/Ubuntu/Kali):
+
+```bash
+sudo apt-get update
+sudo apt-get install -y nmap whois whatweb dnsutils amass
+```
+
+Go-based tools:
+
+```bash
+go install github.com/projectdiscovery/naabu/v2/cmd/naabu@latest
+go install github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
+```
 
 ### Prisma / DB issues
-- Ensure Postgres is running.
-- Verify your `DATABASE_URL`.
+- Ensure Postgres is running
+- Verify `DATABASE_URL`
 - Re-run:
 
 ```bash
@@ -236,15 +280,23 @@ npx prisma db push
 
 ---
 
-## Roadmap (high level)
+## Roadmap
 
-- deeper NOVA integration (tool calling, structured outputs, workflows)
-- expanded enrichment sources (GeoIP API, ASN, passive DNS)
-- better portability (Docker compose, cross-platform tool management)
-- additional R.O.I. platform integrations as services become available
+- deeper NOVA integration (tool calling, structured outputs, workflow automation)
+- enrichment expansion (GeoIP API, ASN, passive DNS)
+- improved portability (Docker Compose, cross-platform tool management)
+- additional R.O.I. platform services integration
 
 ---
 
-## Research & education notice
+## License
+
+Licensed under the **MIT License**. See `LICENSE` for details.
+
+---
+
+## Research & Education Notice
+
+NYMPHORA is provided **for research and educational purposes only**.
 
 NYMPHORA is provided **for research and educational purposes only**.
