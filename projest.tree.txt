@@ -1,0 +1,190 @@
+shadowhunter@sara:~/nymphora$ tree -I node_modules
+.
+├── app
+│   ├── api
+│   │   ├── batch
+│   │   │   └── route.ts
+│   │   ├── bootstrap
+│   │   │   └── route.ts
+│   │   ├── cases
+│   │   │   ├── [id]
+│   │   │   │   └── route.ts
+│   │   │   └── route.ts
+│   │   ├── console
+│   │   │   └── route.ts
+│   │   ├── deep
+│   │   │   └── route.ts
+│   │   ├── edges
+│   │   │   └── route.ts
+│   │   ├── entities
+│   │   │   └── route.ts
+│   │   ├── geoip
+│   │   │   ├── batch
+│   │   │   │   └── route.ts
+│   │   │   └── route.ts
+│   │   ├── notes
+│   │   │   └── route.ts
+│   │   ├── nova
+│   │   │   ├── conversations
+│   │   │   │   └── route.ts
+│   │   │   ├── ioc
+│   │   │   │   └── route.ts
+│   │   │   ├── report
+│   │   │   │   └── route.ts
+│   │   │   ├── route.ts
+│   │   │   ├── search
+│   │   │   │   └── route.ts
+│   │   │   └── sync
+│   │   │       └── route.ts
+│   │   ├── scan
+│   │   │   └── route.ts
+│   │   └── transform
+│   │       ├── dns
+│   │       │   └── route.ts
+│   │       ├── http-title
+│   │       │   └── route.ts
+│   │       ├── scan
+│   │       │   └── route.ts
+│   │       └── whois
+│   │           └── route.ts
+│   ├── data
+│   │   ├── COPYRIGHT.txt
+│   │   ├── GeoLite2-City.mmdb
+│   │   ├── LICENSE.txt
+│   │   └── README.txt
+│   ├── favicon.ico
+│   ├── globals.css
+│   ├── hooks
+│   │   ├── useAutoInvestigate.ts
+│   │   ├── useCameraFocus.ts
+│   │   ├── useContextMenu.ts
+│   │   ├── useCytoscapeInitializer.ts
+│   │   ├── useEvidenceSync.ts
+│   │   ├── useExternalFocus.ts
+│   │   ├── useFilters.ts
+│   │   ├── use-mobile.ts
+│   │   ├── usePathTracing.ts
+│   │   ├── use-toast.ts
+│   │   └── useViewModes.ts
+│   ├── layout.tsx
+│   ├── logic
+│   │   ├── autoscan.ts
+│   │   ├── deepScan.ts
+│   │   ├── detectors.ts
+│   │   ├── mapDns.ts
+│   │   ├── mapHttpTitle.ts
+│   │   ├── mapWhois.ts
+│   │   ├── merge.ts
+│   │   ├── transforms.ts
+│   │   └── useNymphoraDataEngine.ts
+│   ├── page.tsx
+│   ├── scanner
+│   │   ├── core.ts
+│   │   ├── executor.ts
+│   │   └── types.ts
+│   └── utils
+│       ├── centerOnCollection.ts
+│       ├── isIpOrDomain.ts
+│       ├── payloadBuilder.ts
+│       ├── scanCacheExtensions.ts
+│       ├── scanCacheGraphBuilder.ts
+│       ├── scanCache.ts
+│       ├── toFlatElements.ts
+│       ├── updateDegreeClasses.ts
+│       └── updateEdgeWeights.ts
+├── components
+│   ├── console
+│   │   └── deep
+│   │       ├── DeepReconLogs.tsx
+│   │       └── DeepReconPanel.tsx
+│   ├── DeepReconConsoleRenderer.tsx
+│   ├── graph3d
+│   │   ├── DeckGLOverlay.tsx
+│   │   ├── hooks.ts
+│   │   └── NodeMarker.tsx
+│   ├── NymphoraBottomBar.tsx
+│   ├── NymphoraConsoleContext.tsx
+│   ├── NymphoraGraph3D.tsx
+│   ├── NymphoraGraph.tsx
+│   ├── NymphoraInspector.tsx
+│   ├── NymphoraSidebar.tsx
+│   ├── roi
+│   │   ├── context
+│   │   │   └── NovaContext.tsx
+│   │   ├── nova
+│   │   │   ├── NovaChat.tsx
+│   │   │   ├── NovaHistoryPopover.tsx
+│   │   │   ├── NovaMessageBubble.tsx
+│   │   │   ├── NovaOverlay.tsx
+│   │   │   ├── NovaWindow.tsx
+│   │   │   ├── types.ts
+│   │   │   ├── utils.tsx
+│   │   │   └── widgets.tsx
+│   │   ├── NovaChat.tsx
+│   │   ├── NovaHistoryPopover.tsx
+│   │   ├── NovaOverlay.tsx
+│   │   └── NovaWindow.tsx
+│   ├── sidebar
+│   │   ├── logic
+│   │   │   ├── useDeepReconRouter.ts
+│   │   │   └── useDeepScan.ts
+│   │   ├── SidebarActions.tsx
+│   │   ├── SidebarDeepScanButton.tsx
+│   │   ├── SidebarEvidence.tsx
+│   │   ├── SidebarFooter.tsx
+│   │   ├── SidebarHeader.tsx
+│   │   ├── sidebar_opis.txt
+│   │   ├── SidebarPivotHistory.tsx
+│   │   └── SidebarSearchHistory.tsx
+│   ├── tree_project.txt
+│   └── ui
+│       ├── accordion.tsx
+│       ├── avatar.tsx
+│       ├── avatar.tsx.zip
+│       ├── badge.tsx
+│       ├── button.tsx
+│       ├── card.tsx
+│       ├── collapsible.tsx
+│       ├── command.tsx
+│       ├── dialog.tsx
+│       ├── input.tsx
+│       ├── label.tsx
+│       ├── popover.tsx
+│       ├── resizable.tsx
+│       ├── scroll-area.tsx
+│       ├── separator.tsx
+│       ├── sheet.tsx
+│       ├── sidebar.tsx
+│       ├── skeleton.tsx
+│       ├── switch.tsx
+│       ├── tabs.tsx
+│       ├── textarea.tsx
+│       └── tooltip.tsx
+├── components.json
+├── eslint.config.mjs
+├── lib
+│   ├── db.ts
+│   ├── geoip-service.ts
+│   ├── nymphora-3d-utils.ts
+│   └── utils.ts
+├── next.config.ts
+├── next-env.d.ts
+├── package.json
+├── package-lock.json
+├── postcss.config.mjs
+├── prisma
+│   └── schema.prisma
+├── projest.tree.txt
+├── public
+│   ├── file.svg
+│   ├── globe.svg
+│   ├── next.svg
+│   ├── vercel.svg
+│   └── window.svg
+├── README.md
+├── tsconfig.json
+└── types
+
+44 directories, 140 files
+shadowhunter@sara:~/nymphora$ 
+
