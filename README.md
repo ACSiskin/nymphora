@@ -299,4 +299,3 @@ Licensed under the **MIT License**. See `LICENSE` for details.
 
 NYMPHORA is provided **for research and educational purposes only**.
 
-NYMPHORA is provided **for research and educational purposes only**.
