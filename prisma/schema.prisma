@@ -1,0 +1,209 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Case {
+  id          String   @id @default(cuid())
+  type        String
+  title       String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  edges       Edge[]
+  entities    Entity[]
+}
+
+model Entity {
+  id        String   @id @default(cuid())
+  caseId    String
+  type      String
+  value     String
+  label     String?
+  tags      Json?
+  props     Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  sources   Edge[]   @relation("Edge_source")
+  targets   Edge[]   @relation("Edge_target")
+  case      Case     @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@index([caseId, type, value])
+}
+
+model Edge {
+  id        String   @id @default(cuid())
+  caseId    String
+  sourceId  String
+  targetId  String
+  type      String
+  label     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  case      Case     @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  source    Entity   @relation("Edge_source", fields: [sourceId], references: [id], onDelete: Cascade)
+  target    Entity   @relation("Edge_target", fields: [targetId], references: [id], onDelete: Cascade)
+
+  @@index([caseId, sourceId, targetId, type])
+}
+
+model StoredFile {
+  id              String           @id @default(cuid())
+  originalName    String
+  mimeType        String?
+  size            Int?
+  hash            String?
+  checksum        String?
+  diskPath        String
+  classification  String?
+  source          String?
+  threatScore     Int?
+  isDeleted       Boolean          @default(false)
+  uploadedBy      String?
+  createdAt       DateTime         @default(now())
+  caseFiles       CaseFile[]
+  novaAttachments NovaAttachment[]
+}
+
+model RoiCase {
+  id               String             @id @default(cuid())
+  caseId           String             @unique
+  title            String
+  description      String?
+  category         String
+  priority         String
+  status           String
+  owner            String
+  team             String[]
+  assignees        String[]
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  deadline         DateTime?
+  dataType         String
+  inputValue       String
+  sources          String[]
+  tags             String[]
+  trustLevel       String
+  tlp              String
+  relatedCases     String[]
+  relatedEntities  String[]
+  origin           String
+  mode             String
+  workflowTemplate String?
+  integrations     String[]
+  visibility       String
+  accessUsers      String[]
+  caseToken        String?
+  initialNote      String?
+  files            CaseFile[]
+  notes            CaseNote[]
+  conversations    NovaConversation[]
+  novaMessages     NovaMessage[]
+}
+
+model CaseNote {
+  id            String   @id @default(cuid())
+  caseId        String
+  author        String?
+  source        String
+  text          String
+  reportSection String?
+  createdAt     DateTime @default(now())
+  case          RoiCase  @relation(fields: [caseId], references: [id], onDelete: Cascade)
+}
+
+model CaseFile {
+  id                      String     @id @default(cuid())
+  caseId                  String
+  fileId                  String
+  label                   String?
+  note                    String?
+  isEvidence              Boolean    @default(false)
+  evidenceType            String?
+  linkedFromNovaMessageId String?
+  createdAt               DateTime   @default(now())
+  case                    RoiCase    @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  file                    StoredFile @relation(fields: [fileId], references: [id], onDelete: Cascade)
+}
+
+model NovaConversation {
+  id        String        @id @default(cuid())
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  title     String?
+  caseId    String?
+  case      RoiCase?      @relation(fields: [caseId], references: [id])
+  messages  NovaMessage[]
+}
+
+model NovaMessage {
+  id             String           @id @default(cuid())
+  createdAt      DateTime         @default(now())
+  role           String
+  content        String
+  
+  // NOWE POLA DLA GLOBALNEGO KONTEKSTU
+  contextData    Json?            // Snapshot danych z narzędzia (np. węzeł grafu)
+  toolSource     String?          // Źródło: "nymphora", "eyris", "global"
+
+  isPinned       Boolean          @default(false)
+  
+  conversationId String
+  caseId         String?
+
+  attachments    NovaAttachment[]
+  
+  case           RoiCase?         @relation(fields: [caseId], references: [id])
+  conversation   NovaConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+}
+
+model NovaAttachment {
+  id        String      @id @default(cuid())
+  messageId String
+  fileId    String
+  createdAt DateTime    @default(now())
+  file      StoredFile  @relation(fields: [fileId], references: [id], onDelete: Cascade)
+  message   NovaMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
+}
+
+// ==========================================
+// NYMPHORA: SIMPLE & POWERFUL LOG
+// ==========================================
+
+// GŁÓWNA TECZKA ZASOBU (np. osintownia.pl)
+model NetworkHost {
+  id          String         @id @default(cuid())
+  target      String         @unique  // Tutaj siedzi "osintownia.pl"
+  type        String         // 'IP' | 'DOMAIN'
+  
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  scans       NymphoraScan[] // Historia skanów
+}
+
+// POJEDYNCZY SKAN (Jeden wiersz = Jeden pełny raport)
+model NymphoraScan {
+  id          String      @id @default(cuid())
+  
+  // Czytelność w bazie:
+  target      String      // Kopia "osintownia.pl" żebyś widział w tabeli co to jest bez klikania relacji
+  
+  scannedAt   DateTime    @default(now())
+  
+  // Wszystkie dane w jednym worku.
+  // Porty, Whois, WebTech - wszystko tu siedzi czytelnie.
+  data        Json        
+  
+  // Relacje
+  hostId      String
+  host        NetworkHost @relation(fields: [hostId], references: [id], onDelete: Cascade)
+  roiCaseId   String?     // Opcjonalne podpięcie pod sprawę
+
+  @@index([target])
+}
+// End of schema.
