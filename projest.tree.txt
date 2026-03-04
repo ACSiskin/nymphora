@@ -1,4 +1,3 @@
-shadowhunter@sara:~/nymphora$ tree -I node_modules
 .
 ├── app
 │   ├── api
@@ -186,5 +185,4 @@ shadowhunter@sara:~/nymphora$ tree -I node_modules
 └── types
 
 44 directories, 140 files
-shadowhunter@sara:~/nymphora$ 
 
